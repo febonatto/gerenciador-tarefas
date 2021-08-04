@@ -1,0 +1,92 @@
+<div class="container p-4 rounded-3 shadow-lg">
+    <div class="row p-2">
+        <div class="col-6 col-md-10 mb-3">
+            <h3>Tarefas:</h3>
+            <span *ngIf="tasks.length === 0 && !filter">Você ainda não possui tarefas.</span>
+        </div>
+        <div class="col-6 col-md-2 px-0 text-end">
+            <a [routerLink]="['/register-task']">
+                <button class="btn btn-success">
+                    <i class="bi bi-plus"></i>
+                    <span class="d-none d-lg-inline-block mx-1">Adicionar</span>
+                </button>
+            </a>
+        </div>
+        <div id="search-container" class="col-12 mb-3">
+            <input type="text" id="search" class="form-control" placeholder="Procure tarefas por nome..."
+                (keyup)="search($event)">
+        </div>
+        <table *ngIf="tasks.length > 0" class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="order" scope="col" (click)="changeOrder()">
+                        Nome
+                        <i class="bi bi-caret-down-fill" *ngIf="isAsc()"></i>
+                        <i class="bi bi-caret-up-fill" *ngIf="!isAsc()"></i>
+                    </th>
+                    <th scope="col">Concluída</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let task of tasks" [ngClass]="{finished: task.isFinished}">
+                    <td>{{ task.name }}</td>
+                    <td>
+                        <div class="form-check form-switch">
+                            <input type="checkbox" class="form-check-input" [checked]="task.isFinished"
+                                (click)="markFinished(task.id)">
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <a [routerLink]="['/update-task/' + task.id]">
+                            <button type="button" class="btn btn-secondary">
+                                <i class="bi bi-pencil"></i>
+                                <span class="d-none d-lg-inline-block mx-1">Editar</span>
+                            </button>
+                        </a>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalRemove"
+                            (click)="callModal(task.id)">
+                            <i class="bi bi-trash"></i>
+                            <span class="d-none d-lg-inline-block mx-1">Remover</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <ul *ngIf="tasks.length > 0" class="pagination mt-3">
+            <li class="page-item">
+                <a class="page-link" aria-label="Previous" (click)="changePage(1)">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li *ngFor="let pageNumber of pages" class="page-item page-option" [ngClass]="{ 'active': pageNumber === 1 }">
+                <a class="page-link" (click)="changePage(pageNumber)">{{ pageNumber }}</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" aria-label="Next" (click)="changePage(pages.length)">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div id="modalRemove" class="modal fade" tabindex="-1" aria-labelledby="remove" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="remove" class="modal-title">{{ task?.name }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Deseja remover a tarefa?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+                <button type="button" id="delete-button" class="btn btn-danger" (click)="deleteTask(task?.id)"
+                    data-bs-dismiss="modal">
+                    Remover
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

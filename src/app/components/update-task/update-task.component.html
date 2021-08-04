@@ -1,0 +1,36 @@
+<div class="container">
+    <form [formGroup]="form" class="row g-3 needs-validation" (submit)="updateTask($event)">
+        <div class="col-10 col-md-12 my-4 mx-auto">
+            <label for="task" class="form-label">Tarefa:</label>
+            <div class="row">
+                <div class="col-8 col-md-9 p-0">
+                    <input type="text" id="task" class="form-control" [ngClass]="validateField('name')"
+                        formControlName="name">
+                    <div class="invalid-feedback">
+                        <span *ngIf="form.controls.name.touched &&
+                            form.controls.name.errors?.required">O campo tarefa é obrigatório.</span>
+                        <span *ngIf="form.controls.name.touched &&
+                            form.controls.name.errors?.minlength">A tarefa deve conter ao menos 5 caracteres.</span>
+                    </div>
+                </div>
+                <div class="col-2 col-md-2 p-0">
+                    <button type="submit" class="add btn btn-primary" [disabled]="form.invalid">
+                        <i class="bi bi-save"></i>
+                        <span class="d-none d-lg-inline-block mx-1">Salvar</span>
+                    </button>
+                </div>
+                <div class="col-2 col-md-1 p-0">
+                    <a [routerLink]="['/']">
+                        <button type="button" class="return btn btn-light" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" title="Voltar">
+                            <i class="bi bi-arrow-return-left"></i>
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="custom-toast p-3 shadow-sm">
+    <span>Tarefa alterada com sucesso!</span>
+</div>
