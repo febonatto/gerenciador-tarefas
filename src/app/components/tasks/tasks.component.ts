@@ -41,7 +41,10 @@ export class TasksComponent implements OnInit {
     this.taskService.deleteTask(id);
 
     // após a remoção verifica se a última página ainda contem elementos, caso a última página fique vazia será retornado uma página.
-    if (this.tasks.length === 1) this.currentPage--;
+    if (this.tasks.length === 1) {
+      this.currentPage--;
+      this.selectedPage();
+    }
 
     // após remover no principal puxa a alteração para o Array<Task> local, e atualiza a quantidade de páginas necessárias para exibição.
     this.readTasks();
@@ -78,6 +81,7 @@ export class TasksComponent implements OnInit {
 
     // após realizar o filtro chama a função "getPages" que retorna a quantidade necessária de páginas para exibir a seleção atual.
     this.pages = this.taskService.getPages();
+    this.selectedPage();
   }
 
   // método que muda de página de acordo com a seleção do usuário.
